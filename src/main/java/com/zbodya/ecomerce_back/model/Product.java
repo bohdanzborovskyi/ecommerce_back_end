@@ -2,6 +2,7 @@ package com.zbodya.ecomerce_back.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,10 +25,10 @@ public class Product {
     private int price;
 
     @Column(name = "discounted_price")
-    private int discounted_price;
+    private int discountedPrice;
 
     @Column(name = "discount_present")
-    private int discount_present;
+    private int discountPresent;
 
     @Column(name = "quantity")
     private int quantity;
@@ -37,6 +38,12 @@ public class Product {
 
     @Column(name = "color")
     private String color;
+
+    @Column(name = "discountPercent")
+    private int discountPercent;
+
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
 
     @Embedded
     @ElementCollection
@@ -61,13 +68,16 @@ public class Product {
 
     public Product(){}
 
-    public Product(Long id, String title, String description, int price, int discounted_price, int discount_present, int quantity, String brand, String color, Set<Size> sizes, String imageUrl, List<Rating> ratings, List<Review> reviews, int numRatings, Category category) {
+    public Product(Long id, String title, String description, int price, int discountedPrice,
+                   int discountPresent, int quantity, String brand, String color, Set<Size> sizes,
+                   String imageUrl, List<Rating> ratings, List<Review> reviews, int numRatings,
+                   Category category, int discountPercent) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
-        this.discounted_price = discounted_price;
-        this.discount_present = discount_present;
+        this.discountedPrice = discountedPrice;
+        this.discountPresent = discountPresent;
         this.quantity = quantity;
         this.brand = brand;
         this.color = color;
@@ -77,6 +87,7 @@ public class Product {
         this.reviews = reviews;
         this.numRatings = numRatings;
         this.category = category;
+        this.discountPercent = discountPercent;
     }
 
     public Long getId() {
@@ -111,20 +122,20 @@ public class Product {
         this.price = price;
     }
 
-    public int getDiscounted_price() {
-        return discounted_price;
+    public int getDiscountedPrice() {
+        return discountedPrice;
     }
 
-    public void setDiscounted_price(int discounted_price) {
-        this.discounted_price = discounted_price;
+    public void setDiscountedPrice(int discountedPrice) {
+        this.discountedPrice = discountedPrice;
     }
 
-    public int getDiscount_present() {
-        return discount_present;
+    public int getDiscountPresent() {
+        return discountPresent;
     }
 
-    public void setDiscount_present(int discount_present) {
-        this.discount_present = discount_present;
+    public void setDiscountPresent(int discountPresent) {
+        this.discountPresent = discountPresent;
     }
 
     public int getQuantity() {
@@ -197,5 +208,21 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
     }
 }
