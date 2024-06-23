@@ -6,36 +6,34 @@ import com.zbodya.ecomerce_back.model.Review;
 import com.zbodya.ecomerce_back.model.User;
 import com.zbodya.ecomerce_back.repository.ReviewRepository;
 import com.zbodya.ecomerce_back.request.ReviewRequest;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
 
-    private final ReviewRepository reviewRepository;
-    private final ProductService productService;
+  private final ReviewRepository reviewRepository;
+  private final ProductService productService;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ProductService productService) {
-        this.reviewRepository = reviewRepository;
-        this.productService = productService;
-    }
+  public ReviewServiceImpl(ReviewRepository reviewRepository, ProductService productService) {
+    this.reviewRepository = reviewRepository;
+    this.productService = productService;
+  }
 
+  @Override
+  public Review createReview(ReviewRequest reviewRequest, User user) throws ProductException {
+    Product product = productService.findProductById(reviewRequest.getProductId());
+    Review review = new Review();
+    review.setReview(reviewRequest.getReview());
+    review.setUser(user);
+    review.setProduct(product);
+    review.setCreatedAt(LocalDateTime.now());
+    return reviewRepository.save(review);
+  }
 
-    @Override
-    public Review createReview(ReviewRequest reviewRequest, User user) throws ProductException {
-        Product product = productService.findProductById(reviewRequest.getProductId());
-        Review review = new Review();
-        review.setReview(reviewRequest.getReview());
-        review.setUser(user);
-        review.setProduct(product);
-        review.setCreatedAt(LocalDateTime.now());
-        return reviewRepository.save(review);
-    }
-
-    @Override
-    public List<Review> getAllProdcutsReview(Long productId) {
-        return reviewRepository.getAllProductsReview(productId);
-    }
+  @Override
+  public List<Review> getAllProdcutsReview(Long productId) {
+    return reviewRepository.getAllProductsReview(productId);
+  }
 }

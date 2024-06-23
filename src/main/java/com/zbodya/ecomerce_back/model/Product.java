@@ -1,7 +1,6 @@
 package com.zbodya.ecomerce_back.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,218 +10,231 @@ import java.util.Set;
 @Entity
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @Column(name = "title")
-    private String title;
+  @Column(name = "title")
+  private String title;
 
-    @Column(name = "description")
-    private String description;
+  @Column(name = "description", length = 512)
+  private String description;
 
-    @Column(name = "price")
-    private int price;
+  @Column(name = "price")
+  private int price;
 
-    @Column(name = "discounted_price")
-    private int discountedPrice;
+  @Column(name = "discounted_price")
+  private int discountedPrice;
 
-    @Column(name = "discount_present")
-    private int discountPresent;
+  @Column(name = "discount_present")
+  private int discountPresent;
 
-    @Column(name = "quantity")
-    private int quantity;
+  @Column(name = "quantity")
+  private int quantity;
 
-    @Column(name = "brand")
-    private String brand;
+  @Column(name = "brand")
+  private String brand;
 
-    @Column(name = "color")
-    private String color;
+  @Column(name = "color")
+  private String color;
 
-    @Column(name = "discountPercent")
-    private int discountPercent;
+  @Column(name = "discountPercent")
+  private int discountPercent;
 
-    @Column(name = "createdAt")
-    private LocalDateTime createdAt;
+  @Column(name = "createdAt")
+  private LocalDateTime createdAt;
 
-    @Embedded
-    @ElementCollection
-    @Column(name = "sizes")
-    private Set<Size> sizes= new HashSet<>();
+  @Embedded
+  @ElementCollection
+  @Column(name = "sizes")
+  private Set<Size> sizes = new HashSet<>();
 
-    @Column(name = "image_url")
-    private String imageUrl;
+  @Column(name = "image_url", length = 2048)
+  private String imageUrl;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rating> ratings = new ArrayList<>();
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Rating> ratings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Review> reviews = new ArrayList<>();
 
-    @Column(name = "num_ratings")
-    private int numRatings;
+  @Column(name = "num_ratings")
+  private int numRatings;
 
-    @ManyToOne()
-    @JoinColumn(name = "category_id")
-    private Category category;
+  @ManyToOne()
+  @JoinColumn(name = "category_id")
+  private Category category;
 
-    public Product(){}
+  public Product() {}
 
-    public Product(Long id, String title, String description, int price, int discountedPrice,
-                   int discountPresent, int quantity, String brand, String color, Set<Size> sizes,
-                   String imageUrl, List<Rating> ratings, List<Review> reviews, int numRatings,
-                   Category category, int discountPercent) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.discountedPrice = discountedPrice;
-        this.discountPresent = discountPresent;
-        this.quantity = quantity;
-        this.brand = brand;
-        this.color = color;
-        this.sizes = sizes;
-        this.imageUrl = imageUrl;
-        this.ratings = ratings;
-        this.reviews = reviews;
-        this.numRatings = numRatings;
-        this.category = category;
-        this.discountPercent = discountPercent;
-    }
+  public Product(
+      Long id,
+      String title,
+      String description,
+      int price,
+      int discountedPrice,
+      int discountPresent,
+      int quantity,
+      String brand,
+      String color,
+      Set<Size> sizes,
+      String imageUrl,
+      List<Rating> ratings,
+      List<Review> reviews,
+      int numRatings,
+      Category category,
+      int discountPercent) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.price = price;
+    this.discountedPrice = discountedPrice;
+    this.discountPresent = discountPresent;
+    this.quantity = quantity;
+    this.brand = brand;
+    this.color = color;
+    this.sizes = sizes;
+    this.imageUrl = imageUrl;
+    this.ratings = ratings;
+    this.reviews = reviews;
+    this.numRatings = numRatings;
+    this.category = category;
+    this.discountPercent = discountPercent;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public int getPrice() {
-        return price;
-    }
+  public int getPrice() {
+    return price;
+  }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
+  public void setPrice(int price) {
+    this.price = price;
+  }
 
-    public int getDiscountedPrice() {
-        return discountedPrice;
-    }
+  public int getDiscountedPrice() {
+    return discountedPrice;
+  }
 
-    public void setDiscountedPrice(int discountedPrice) {
-        this.discountedPrice = discountedPrice;
-    }
+  public void setDiscountedPrice(int discountedPrice) {
+    this.discountedPrice = discountedPrice;
+  }
 
-    public int getDiscountPresent() {
-        return discountPresent;
-    }
+  public int getDiscountPresent() {
+    return discountPresent;
+  }
 
-    public void setDiscountPresent(int discountPresent) {
-        this.discountPresent = discountPresent;
-    }
+  public void setDiscountPresent(int discountPresent) {
+    this.discountPresent = discountPresent;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public int getQuantity() {
+    return quantity;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 
-    public String getBrand() {
-        return brand;
-    }
+  public String getBrand() {
+    return brand;
+  }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+  public void setBrand(String brand) {
+    this.brand = brand;
+  }
 
-    public String getColor() {
-        return color;
-    }
+  public String getColor() {
+    return color;
+  }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+  public void setColor(String color) {
+    this.color = color;
+  }
 
-    public Set<Size> getSizes() {
-        return sizes;
-    }
+  public Set<Size> getSizes() {
+    return sizes;
+  }
 
-    public void setSizes(Set<Size> sizes) {
-        this.sizes = sizes;
-    }
+  public void setSizes(Set<Size> sizes) {
+    this.sizes = sizes;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    public List<Rating> getRatings() {
-        return ratings;
-    }
+  public List<Rating> getRatings() {
+    return ratings;
+  }
 
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
-    }
+  public void setRatings(List<Rating> ratings) {
+    this.ratings = ratings;
+  }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
+  public List<Review> getReviews() {
+    return reviews;
+  }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
 
-    public int getNumRatings() {
-        return numRatings;
-    }
+  public int getNumRatings() {
+    return numRatings;
+  }
 
-    public void setNumRatings(int numRatings) {
-        this.numRatings = numRatings;
-    }
+  public void setNumRatings(int numRatings) {
+    this.numRatings = numRatings;
+  }
 
-    public Category getCategory() {
-        return category;
-    }
+  public Category getCategory() {
+    return category;
+  }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+  public void setCategory(Category category) {
+    this.category = category;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    public int getDiscountPercent() {
-        return discountPercent;
-    }
+  public int getDiscountPercent() {
+    return discountPercent;
+  }
 
-    public void setDiscountPercent(int discountPercent) {
-        this.discountPercent = discountPercent;
-    }
+  public void setDiscountPercent(int discountPercent) {
+    this.discountPercent = discountPercent;
+  }
 }

@@ -1,128 +1,135 @@
 package com.zbodya.ecomerce_back.request;
 
 import com.zbodya.ecomerce_back.model.Size;
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class CreateProductRequest {
 
-    private String title;
-    private String description;
-    private int price;
-    private int discountedPrice;
-    private int discountPresent;
-    private int quantity;
-    private String color;
-    private String brand;
-    private Set<Size> sizes = new HashSet<>();
-    private String imageUrl;
-    private String topLevelCategory;
-    private String secondLevelCategory;
+  private String title;
+  private String description;
+  private int price;
+  private int discountedPrice;
+  private int discountPresent;
+  private int discountPercent;
+  private int quantity;
+  private String color;
+  private String brand;
+  private Set<Size> sizes = new HashSet<>();
+  private String imageUrl;
+  private String topLevelCategory;
+  private String secondLevelCategory;
+  private String thirdLevelCategory;
 
-    public String getThirdLevelCategory() {
-        return thirdLevelCategory;
-    }
+  public int getDiscountPercent() {
+    return discountPercent;
+  }
 
-    public void setThirdLevelCategory(String thirdLevelCategory) {
-        this.thirdLevelCategory = thirdLevelCategory;
-    }
+  public void setDiscountPercent(int discountPercent) {
+    this.discountPercent = discountPercent;
+  }
 
-    public String getSecondLevelCategory() {
-        return secondLevelCategory;
-    }
+  public String getThirdLevelCategory() {
+    return thirdLevelCategory;
+  }
 
-    public void setSecondLevelCategory(String secondLevelCategory) {
-        this.secondLevelCategory = secondLevelCategory;
-    }
+  public void setThirdLevelCategory(String thirdLevelCategory) {
+    this.thirdLevelCategory = thirdLevelCategory;
+  }
 
-    public String getTopLevelCategory() {
-        return topLevelCategory;
-    }
+  public String getSecondLevelCategory() {
+    return secondLevelCategory;
+  }
 
-    public void setTopLevelCategory(String topLevelCategory) {
-        this.topLevelCategory = topLevelCategory;
-    }
+  public void setSecondLevelCategory(String secondLevelCategory) {
+    this.secondLevelCategory = secondLevelCategory;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public String getTopLevelCategory() {
+    return topLevelCategory;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public void setTopLevelCategory(String topLevelCategory) {
+    this.topLevelCategory = topLevelCategory;
+  }
 
-    public Set<Size> getSizes() {
-        return sizes;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public void setSizes(Set<Size> sizes) {
-        this.sizes = sizes;
-    }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    public String getBrand() {
-        return brand;
-    }
+  public Set<Size> getSizes() {
+    return sizes;
+  }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+  public void setSizes(Set<Size> sizes) {
+    this.sizes = sizes;
+  }
 
-    public String getColor() {
-        return color;
-    }
+  public String getBrand() {
+    return brand;
+  }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+  public void setBrand(String brand) {
+    this.brand = brand;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public String getColor() {
+    return color;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  public void setColor(String color) {
+    this.color = color;
+  }
 
-    public int getDiscountPresent() {
-        return discountPresent;
-    }
+  public int getQuantity() {
+    return quantity;
+  }
 
-    public void setDiscountPresent(int discountPresent) {
-        this.discountPresent = discountPresent;
-    }
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 
-    public int getDiscountedPrice() {
-        return discountedPrice;
-    }
+  public int getDiscountPresent() {
+    return discountPresent;
+  }
 
-    public void setDiscountedPrice(int discountedPrice) {
-        this.discountedPrice = discountedPrice;
-    }
+  public void setDiscountPresent(int discountPresent) {
+    this.discountPresent = discountPresent;
+  }
 
-    public int getPrice() {
-        return price;
-    }
+  public int getDiscountedPrice() {
+    return discountedPrice;
+  }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
+  public void setDiscountedPrice(int discountedPrice) {
+    this.discountedPrice = discountedPrice;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public int getPrice() {
+    return price;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setPrice(int price) {
+    this.price = price;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    private String thirdLevelCategory;
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
 }
