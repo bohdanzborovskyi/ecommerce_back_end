@@ -105,4 +105,5 @@ public class CartItem {
   public void setUserId(Long userId) {
     this.userId = userId;
   }
+
 }

@@ -35,7 +35,8 @@ public class Order {
 
   private Integer discount;
 
-  private String orderStatus;
+  @Enumerated(EnumType.STRING)
+  private OrderStatus orderStatus;
 
   private int totalItem;
 
@@ -55,7 +56,7 @@ public class Order {
       double totalPrice,
       Integer totalDiscountedPrice,
       Integer discount,
-      String orderStatus,
+      OrderStatus orderStatus,
       int totalItem,
       LocalDateTime createdAt) {
     this.id = id;
@@ -162,11 +163,11 @@ public class Order {
     this.discount = discount;
   }
 
-  public String getOrderStatus() {
+  public OrderStatus getOrderStatus() {
     return orderStatus;
   }
 
-  public void setOrderStatus(String orderStatus) {
+  public void setOrderStatus(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;
   }
 

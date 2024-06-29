@@ -1,12 +1,16 @@
 package com.zbodya.ecomerce_back.model;
 
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 // @Embeddable
 public class PaymentDetails {
 
   private String paymentId;
   private String paymentMethod;
-  private String paymentStatus;
+  @Enumerated(EnumType.STRING)
+  private PaymentStatus paymentStatus;
   private String razorpayPaymentLinkId;
   private String razorpayPaymentLinkReferenceId;
   private String razorpayPaymentLinkStatus;
@@ -16,7 +20,7 @@ public class PaymentDetails {
 
   public PaymentDetails(
       String paymentMethod,
-      String paymentStatus,
+      PaymentStatus paymentStatus,
       String paymentId,
       String razorpayPaymentLinkId,
       String razorpayPaymentLinkReferenceId,
@@ -39,11 +43,11 @@ public class PaymentDetails {
     this.paymentMethod = paymentMethod;
   }
 
-  public String getPaymentStatus() {
+  public PaymentStatus getPaymentStatus() {
     return paymentStatus;
   }
 
-  public void setPaymentStatus(String paymentStatus) {
+  public void setPaymentStatus(PaymentStatus paymentStatus) {
     this.paymentStatus = paymentStatus;
   }
 

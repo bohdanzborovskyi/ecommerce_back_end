@@ -50,4 +50,53 @@ public class OrderController {
     Order order = orderService.findOrderById(orderId);
     return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
   }
+
+  @GetMapping("/delete/{orderId}")
+  public ResponseEntity<Order> deleteOrderById(
+          @RequestHeader("Authorization") String jwt, @PathVariable Long orderId)
+          throws UserException, OrderException {
+    User user = userService.findUserProfileByJwt(jwt);
+    orderService.deleteOrder(orderId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping("delivered/{orderId}")
+  public ResponseEntity<Order> deliveredOrder(
+          @PathVariable Long orderId)
+          throws OrderException {
+    Order order = orderService.deliveredOrder(orderId);
+    return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("shipped/{orderId}")
+  public ResponseEntity<Order> shippedOrder(
+          @PathVariable Long orderId)
+          throws  OrderException {
+    Order order = orderService.shippedOrder(orderId);
+    return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("confirmed/{orderId}")
+  public ResponseEntity<Order> confirmedOrder(
+          @PathVariable Long orderId)
+          throws  OrderException {
+    Order order = orderService.confirmedOrder(orderId);
+    return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("placed/{orderId}")
+  public ResponseEntity<Order> placedOrder(
+          @PathVariable Long orderId)
+          throws  OrderException {
+    Order order = orderService.placedOrder(orderId);
+    return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("canceled/{orderId}")
+  public ResponseEntity<Order> canceledOrder(
+          @PathVariable Long orderId)
+          throws  OrderException {
+    Order order = orderService.canceledOrder(orderId);
+    return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
+  }
 }

@@ -5,7 +5,6 @@ import com.zbodya.ecomerce_back.model.Order;
 import com.zbodya.ecomerce_back.response.ApiResponse;
 import com.zbodya.ecomerce_back.service.OrderService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/orders")
 public class AdminOrderController {
 
-  @Autowired private OrderService orderService;
+  private final OrderService orderService;
+
+  public AdminOrderController(OrderService orderService) {
+    this.orderService = orderService;
+  }
 
   @GetMapping("/")
   public ResponseEntity<List<Order>> getAllOrders() {
