@@ -11,10 +11,7 @@ public class PaymentDetails {
   private String paymentMethod;
   @Enumerated(EnumType.STRING)
   private PaymentStatus paymentStatus;
-  private String razorpayPaymentLinkId;
-  private String razorpayPaymentLinkReferenceId;
-  private String razorpayPaymentLinkStatus;
-  private String razorpayPaymentId;
+  private String payerId;
 
   public PaymentDetails() {}
 
@@ -22,17 +19,11 @@ public class PaymentDetails {
       String paymentMethod,
       PaymentStatus paymentStatus,
       String paymentId,
-      String razorpayPaymentLinkId,
-      String razorpayPaymentLinkReferenceId,
-      String razorpayPaymentLinkStatus,
-      String razorpayPaymentId) {
+      String payerId) {
     this.paymentMethod = paymentMethod;
     this.paymentStatus = paymentStatus;
     this.paymentId = paymentId;
-    this.razorpayPaymentLinkId = razorpayPaymentLinkId;
-    this.razorpayPaymentLinkReferenceId = razorpayPaymentLinkReferenceId;
-    this.razorpayPaymentLinkStatus = razorpayPaymentLinkStatus;
-    this.razorpayPaymentId = razorpayPaymentId;
+    this.payerId = payerId;
   }
 
   public String getPaymentMethod() {
@@ -59,35 +50,13 @@ public class PaymentDetails {
     this.paymentId = paymentId;
   }
 
-  public String getRazorpayPaymentLinkId() {
-    return razorpayPaymentLinkId;
+  public String getPayerId() {
+    return payerId;
   }
 
-  public void setRazorpayPaymentLinkId(String razorpayPaymentLinkId) {
-    this.razorpayPaymentLinkId = razorpayPaymentLinkId;
+  public void setPayerId(String payerId) {
+    this.payerId = payerId;
   }
 
-  public String getRazorpayPaymentLinkReferenceId() {
-    return razorpayPaymentLinkReferenceId;
-  }
 
-  public void setRazorpayPaymentLinkReferenceId(String razorpayPaymentLinkReferenceId) {
-    this.razorpayPaymentLinkReferenceId = razorpayPaymentLinkReferenceId;
-  }
-
-  public String getRazorpayPaymentLinkStatus() {
-    return razorpayPaymentLinkStatus;
-  }
-
-  public void setRazorpayPaymentLinkStatus(String razorpayPaymentLinkStatus) {
-    this.razorpayPaymentLinkStatus = razorpayPaymentLinkStatus;
-  }
-
-  public String getRazorpayPaymentId() {
-    return razorpayPaymentId;
-  }
-
-  public void setRazorpayPaymentId(String razorpayPaymentId) {
-    this.razorpayPaymentId = razorpayPaymentId;
-  }
 }

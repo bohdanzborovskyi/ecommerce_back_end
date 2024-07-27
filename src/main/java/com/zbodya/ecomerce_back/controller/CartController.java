@@ -4,8 +4,10 @@ import com.zbodya.ecomerce_back.exception.CartItemException;
 import com.zbodya.ecomerce_back.exception.ProductException;
 import com.zbodya.ecomerce_back.exception.UserException;
 import com.zbodya.ecomerce_back.model.Cart;
+import com.zbodya.ecomerce_back.model.CartItem;
 import com.zbodya.ecomerce_back.model.User;
 import com.zbodya.ecomerce_back.request.AddItemRequest;
+import com.zbodya.ecomerce_back.request.UpdateItemRequest;
 import com.zbodya.ecomerce_back.response.ApiResponse;
 import com.zbodya.ecomerce_back.service.CartItemService;
 import com.zbodya.ecomerce_back.service.CartService;
@@ -52,15 +54,31 @@ public class CartController {
 
   @DeleteMapping("/remove/{cartItemId}")
   @Operation(description = "Remove cart item from cart")
-  public ResponseEntity<ApiResponse> removeCartItemFromCart(
+  public ResponseEntity<Long> removeCartItemFromCart(
       @PathVariable Long cartItemId, @RequestHeader("Authorization") String jwt)
       throws UserException, CartItemException {
     User user = userService.findUserProfileByJwt(jwt);
     cartItemService.removeCartItem(user.getId(), cartItemId);
 
-    ApiResponse apiResponse = new ApiResponse();
-    apiResponse.setMessage("Item removed from cart");
-    apiResponse.setStatus(true);
-    return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    return new ResponseEntity<>(cartItemId, HttpStatus.OK);
+  }
+
+  @PutMapping("/update/{cartItemId}")
+  @Operation(description = "Update cart item from cart")
+  public ResponseEntity<CartItem> updateCartItemFromCart(
+          @PathVariable Long cartItemId, @RequestHeader("Authorization") String jwt,
+          @RequestBody UpdateItemRequest updateItemRequest)
+          throws UserException, CartItemException {
+    User user = userService.findUserProfileByJwt(jwt);
+    Cart cart = cartService.findUserCart(user);
+    CartItem updated = new CartItem();
+    for(CartItem cartItem : cart.getCartItems()){
+      if(cartItem.getId().equals(cartItemId)){
+        cartItem.setQuantity(updateItemRequest.getQuantity());
+        cartItemService.updateCadtItem(user.getId(), cartItemId, cartItem);
+        updated = cartItem;
+      }
+    }
+    return new ResponseEntity<>(updated, HttpStatus.OK);
   }
 }

@@ -1,6 +1,7 @@
 package com.zbodya.ecomerce_back.service;
 
 import com.zbodya.ecomerce_back.exception.ProductException;
+import com.zbodya.ecomerce_back.exception.UserException;
 import com.zbodya.ecomerce_back.model.Cart;
 import com.zbodya.ecomerce_back.model.CartItem;
 import com.zbodya.ecomerce_back.model.Product;
@@ -37,8 +38,12 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public String addCartItem(Long userId, AddItemRequest request) throws ProductException {
-    Cart cart = cartRepository.findByUserId(userId);
+  public String addCartItem(Long userId, AddItemRequest request) throws ProductException, UserException {
+    User user = userService.findUserById(userId);
+    Cart cart =
+            cartRepository.findByUserId(user.getId()) == null
+                    ? createCart(user)
+                    : cartRepository.findByUserId(user.getId());
     Product product = productService.findProductById(request.getProductId());
     CartItem cartItem = cartItemService.isCartItemExist(cart, product, request.getSize(), userId);
     if (cartItem == null) {
