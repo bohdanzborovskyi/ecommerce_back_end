@@ -38,6 +38,15 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
+  public void deleteCart(User user){
+    Cart cart = cartRepository.findByUserId(user.getId());
+    if(cart != null){
+      cartRepository.delete(cart);
+    }
+  }
+
+
+  @Override
   public String addCartItem(Long userId, AddItemRequest request) throws ProductException, UserException {
     User user = userService.findUserById(userId);
     Cart cart =

@@ -2,6 +2,7 @@ package com.zbodya.ecomerce_back.controller;
 
 import com.zbodya.ecomerce_back.config.JwtProvider;
 import com.zbodya.ecomerce_back.exception.UserException;
+import com.zbodya.ecomerce_back.model.Role;
 import com.zbodya.ecomerce_back.model.User;
 import com.zbodya.ecomerce_back.repository.UserRepository;
 import com.zbodya.ecomerce_back.request.LoginRequest;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -27,7 +33,7 @@ public class AuthController {
   private final UserRepository userRepository;
   private final JwtProvider jwtProvider;
   private final PasswordEncoder passwordEncoder;
-  private CustomUserServiceImpl customUserService;
+  private final CustomUserServiceImpl customUserService;
 
   public AuthController(
       UserRepository userRepository,
@@ -59,10 +65,15 @@ public class AuthController {
     createdUser.setPassword(passwordEncoder.encode(password));
     createdUser.setFirstName(firstName);
     createdUser.setLastName(lastName);
+    createdUser.addRole(Role.USER);
 
     User savedUser = userRepository.save(createdUser);
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    for(Role role : user.getRoles()){
+      authorities.add(new SimpleGrantedAuthority(role.name()));
+    }
     Authentication authentication =
-        new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword());
+        new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword(), authorities);
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String token = jwtProvider.generateToken(authentication);
     AuthResponse authResponse = new AuthResponse();
@@ -71,7 +82,7 @@ public class AuthController {
     return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
   }
 
-  @PostMapping("/signin")
+  @PostMapping("/login")
   public ResponseEntity<AuthResponse> loinUserHandler(@RequestBody LoginRequest loginRequest)
       throws UserException {
     String userName = loginRequest.getEmail();
@@ -83,7 +94,7 @@ public class AuthController {
     AuthResponse authResponse = new AuthResponse();
     authResponse.setJwt(token);
     authResponse.setMessage("Signing Successfully");
-    return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
+    return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
   }
 
   private Authentication authenticate(String userName, String password) {

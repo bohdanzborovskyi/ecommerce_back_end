@@ -1,25 +1,26 @@
 package com.zbodya.ecomerce_back.service;
 
+import com.zbodya.ecomerce_back.model.MyUserDetails;
+import com.zbodya.ecomerce_back.model.Role;
 import com.zbodya.ecomerce_back.model.User;
 import com.zbodya.ecomerce_back.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class CustomUserServiceImpl implements UserDetailsService {
 
+  @Autowired
   private UserRepository userRepository;
 
-  @Autowired
-  public CustomUserServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+  public CustomUserServiceImpl(){}
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,9 +28,6 @@ public class CustomUserServiceImpl implements UserDetailsService {
     if (user == null) {
       throw new UsernameNotFoundException("User not found by e-mail " + username);
     }
-    List<GrantedAuthority> authorities = new ArrayList<>();
-
-    return new org.springframework.security.core.userdetails.User(
-        user.getEmail(), user.getPassword(), authorities);
+    return new MyUserDetails(user);
   }
 }

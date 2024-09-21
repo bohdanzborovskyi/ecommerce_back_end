@@ -1,6 +1,7 @@
 package com.zbodya.ecomerce_back.controller;
 
 import com.zbodya.ecomerce_back.exception.UserException;
+import com.zbodya.ecomerce_back.model.Role;
 import com.zbodya.ecomerce_back.model.User;
 import com.zbodya.ecomerce_back.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,5 +25,23 @@ public class UserController {
       throws UserException {
     User user = userService.findUserProfileByJwt(jwt);
     return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("/isAdmin")
+  public ResponseEntity<Boolean> isAdmin(@RequestHeader("Authorization") String jwt)
+          throws UserException {
+    User user = userService.findUserProfileByJwt(jwt);
+    return user.getRoles().contains(Role.ADMIN)
+        ? new ResponseEntity<>(Boolean.TRUE, HttpStatus.ACCEPTED)
+        : new ResponseEntity<>(Boolean.FALSE, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("/isUser")
+  public ResponseEntity<Boolean> isUser(@RequestHeader("Authorization") String jwt)
+          throws UserException {
+    User user = userService.findUserProfileByJwt(jwt);
+    return user.getRoles().contains(Role.USER)
+            ? new ResponseEntity<>(Boolean.TRUE, HttpStatus.ACCEPTED)
+            : new ResponseEntity<>(Boolean.FALSE, HttpStatus.ACCEPTED);
   }
 }

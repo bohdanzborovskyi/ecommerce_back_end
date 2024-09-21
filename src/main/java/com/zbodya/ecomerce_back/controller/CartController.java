@@ -63,6 +63,15 @@ public class CartController {
     return new ResponseEntity<>(cartItemId, HttpStatus.OK);
   }
 
+  @DeleteMapping("/remove")
+  @Operation(description = "Remove whole cart")
+  public ResponseEntity<String> removeWholeCart(@RequestHeader("Authorization") String jwt)
+          throws UserException, CartItemException {
+    User user = userService.findUserProfileByJwt(jwt);
+    cartService.deleteCart(user);
+    return new ResponseEntity<>("Cart was emptied for user with ID " + user.getId() ,HttpStatus.OK);
+  }
+
   @PutMapping("/update/{cartItemId}")
   @Operation(description = "Update cart item from cart")
   public ResponseEntity<CartItem> updateCartItemFromCart(

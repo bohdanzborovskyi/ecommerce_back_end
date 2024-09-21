@@ -1,15 +1,20 @@
 package com.zbodya.ecomerce_back.config;
 
+import com.zbodya.ecomerce_back.model.MyUserDetails;
+import com.zbodya.ecomerce_back.service.CustomUserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,15 +28,22 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebSecurity
 public class AppConfig {
 
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .csrf(CsrfConfigurer::disable)
         .authorizeHttpRequests(
-            Authorize ->
-                Authorize.requestMatchers("/api/").authenticated().anyRequest().permitAll())
-        .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
+            auth ->
+                  auth.
+                        requestMatchers("/api/admin/orders/**").hasAuthority("ADMIN").
+                        requestMatchers("/api/cart/**").hasAuthority("USER").
+                        requestMatchers("/api/users/**").permitAll().
+                        requestMatchers("/api/products/**").permitAll().
+                        requestMatchers("/auth/**").permitAll())
+        .userDetailsService(userDetailsService())
+        .addFilterBefore(new JwtValidator(userDetailsService()), BasicAuthenticationFilter.class)
         .cors(
             httpSecurityCorsConfigurer ->
                 httpSecurityCorsConfigurer.configurationSource(
@@ -58,4 +70,20 @@ public class AppConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
+  @Bean
+  UserDetailsService userDetailsService() {
+    return new CustomUserServiceImpl();
+  }
+
+  @Bean
+  DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setUserDetailsService(userDetailsService());
+    authProvider.setPasswordEncoder(passwordEncoder());
+
+    return authProvider;
+  }
+
+
 }

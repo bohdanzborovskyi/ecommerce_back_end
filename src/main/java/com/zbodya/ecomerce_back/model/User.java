@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -18,7 +20,6 @@ public class User {
   private String lastName;
   private String password;
   private String email;
-  private String role;
   private String mobile;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -29,6 +30,10 @@ public class User {
   @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
   private List<PaymentInformation> paymentInformations = new ArrayList<>();
 
+  @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+  @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+  @Enumerated(EnumType.STRING)
+  private Set<Role> roles = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @JsonIgnore
@@ -39,6 +44,8 @@ public class User {
   private List<Review> reviews = new ArrayList<>();
 
   private LocalDateTime createdAt;
+
+  public User() {}
 
   public List<Address> getAddresses() {
     return addresses;
@@ -80,8 +87,6 @@ public class User {
     this.createdAt = createdAt;
   }
 
-  public User() {}
-
   public Long getId() {
     return id;
   }
@@ -122,19 +127,23 @@ public class User {
     this.email = email;
   }
 
-  public String getRole() {
-    return role;
-  }
-
-  public void setRole(String role) {
-    this.role = role;
-  }
-
   public String getMobile() {
     return mobile;
   }
 
   public void setMobile(String mobile) {
     this.mobile = mobile;
+  }
+
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
+
+  public void addRole(Role role){
+    this.roles.add(role);
   }
 }
