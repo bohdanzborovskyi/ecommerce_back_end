@@ -8,6 +8,7 @@ import com.zbodya.ecomerce_back.repository.UserRepository;
 import com.zbodya.ecomerce_back.request.LoginRequest;
 import com.zbodya.ecomerce_back.response.AuthResponse;
 import com.zbodya.ecomerce_back.service.CustomUserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +36,19 @@ public class AuthController {
   private final JwtProvider jwtProvider;
   private final PasswordEncoder passwordEncoder;
   private final CustomUserServiceImpl customUserService;
+  private final RestTemplate restTemplate;
 
   public AuthController(
-      UserRepository userRepository,
-      JwtProvider jwtProvider,
-      PasswordEncoder passwordEncoder,
-      CustomUserServiceImpl customUserService) {
+          UserRepository userRepository,
+          JwtProvider jwtProvider,
+          PasswordEncoder passwordEncoder,
+          CustomUserServiceImpl customUserService,
+          RestTemplate restTemplate) {
     this.userRepository = userRepository;
     this.jwtProvider = jwtProvider;
     this.passwordEncoder = passwordEncoder;
     this.customUserService = customUserService;
+    this.restTemplate = restTemplate;
   }
 
   @PostMapping("/signup")
@@ -55,9 +60,11 @@ public class AuthController {
     String firstName = user.getFirstName();
     String lastName = user.getLastName();
     User isEmailExist = userRepository.findByEmail(email);
+    AuthResponse authResponse = new AuthResponse();
 
     if (isEmailExist != null) {
-      throw new UserException("Email is already used with another account");
+      authResponse.setMessage("Email is already used with another account");
+      return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
     User createdUser = new User();
@@ -76,7 +83,6 @@ public class AuthController {
         new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword(), authorities);
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String token = jwtProvider.generateToken(authentication);
-    AuthResponse authResponse = new AuthResponse();
     authResponse.setMessage("Signup Success");
     authResponse.setJwt(token);
     return new ResponseEntity<>(authResponse, HttpStatus.CREATED);

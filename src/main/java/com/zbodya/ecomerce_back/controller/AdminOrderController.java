@@ -5,6 +5,8 @@ import com.zbodya.ecomerce_back.model.Order;
 import com.zbodya.ecomerce_back.response.ApiResponse;
 import com.zbodya.ecomerce_back.service.OrderService;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +22,15 @@ public class AdminOrderController {
   }
 
   @GetMapping("/")
-  public ResponseEntity<List<Order>> getAllOrders() {
-    List<Order> orders = orderService.getAllOrders();
+  public ResponseEntity<Page<Order>> getAllOrders(
+      @RequestHeader("Authorization") String jwt,
+      @RequestParam("pageSize") int pageSize,
+      @RequestParam("pageNumber") int pageNumber) {
+    Page<Order> orders = orderService.getAllOrdersAdmin(pageNumber, pageSize);
     return new ResponseEntity<>(orders, HttpStatus.ACCEPTED);
   }
 
-  @PutMapping("/{orderId}/confirmed")
+  @GetMapping("/{orderId}/confirm")
   public ResponseEntity<Order> confirmedOrder(
       @PathVariable Long orderId, @RequestHeader("Authorization") String jwt)
       throws OrderException {
@@ -33,7 +38,7 @@ public class AdminOrderController {
     return new ResponseEntity<>(order, HttpStatus.OK);
   }
 
-  @PutMapping("/{orderId}/ship")
+  @GetMapping("/{orderId}/ship")
   public ResponseEntity<Order> shipOrder(
       @PathVariable Long orderId, @RequestHeader("Authorization") String jwt)
       throws OrderException {
@@ -41,7 +46,7 @@ public class AdminOrderController {
     return new ResponseEntity<>(order, HttpStatus.OK);
   }
 
-  @PutMapping("/{orderId}/deliver")
+  @GetMapping("/{orderId}/deliver")
   public ResponseEntity<Order> deliverOrder(
       @PathVariable Long orderId, @RequestHeader("Authorization") String jwt)
       throws OrderException {
@@ -49,7 +54,7 @@ public class AdminOrderController {
     return new ResponseEntity<>(order, HttpStatus.OK);
   }
 
-  @PutMapping("/{orderId}/cancel")
+  @GetMapping("/{orderId}/cancel")
   public ResponseEntity<Order> cancelOrder(
       @PathVariable Long orderId, @RequestHeader("Authorization") String jwt)
       throws OrderException {

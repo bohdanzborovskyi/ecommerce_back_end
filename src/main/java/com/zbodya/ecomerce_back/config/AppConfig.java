@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -37,7 +38,7 @@ public class AppConfig {
         .authorizeHttpRequests(
             auth ->
                   auth.
-                        requestMatchers("/api/admin/orders/**").hasAuthority("ADMIN").
+                        requestMatchers("/api/admin/**").hasAuthority("ADMIN").
                         requestMatchers("/api/cart/**").hasAuthority("USER").
                         requestMatchers("/api/users/**").permitAll().
                         requestMatchers("/api/products/**").permitAll().
@@ -83,6 +84,11 @@ public class AppConfig {
     authProvider.setPasswordEncoder(passwordEncoder());
 
     return authProvider;
+  }
+
+  @Bean
+  RestTemplate restTemplate(){
+    return new RestTemplate();
   }
 
 

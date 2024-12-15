@@ -4,6 +4,8 @@ import com.zbodya.ecomerce_back.exception.OrderException;
 import com.zbodya.ecomerce_back.model.Address;
 import com.zbodya.ecomerce_back.model.Order;
 import com.zbodya.ecomerce_back.model.User;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface OrderService {
@@ -25,6 +27,8 @@ public interface OrderService {
   public Order canceledOrder(Long orderId) throws OrderException;
 
   public List<Order> getAllOrders();
+
+  public Page<Order> getAllOrdersAdmin(Integer pageNumber, Integer pageSize);
 
   public void deleteOrder(Long orderId) throws OrderException;
 }

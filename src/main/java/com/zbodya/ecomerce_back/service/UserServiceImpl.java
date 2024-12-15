@@ -2,9 +2,16 @@ package com.zbodya.ecomerce_back.service;
 
 import com.zbodya.ecomerce_back.config.JwtProvider;
 import com.zbodya.ecomerce_back.exception.UserException;
+import com.zbodya.ecomerce_back.model.Product;
 import com.zbodya.ecomerce_back.model.User;
 import com.zbodya.ecomerce_back.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,4 +40,15 @@ public class UserServiceImpl implements UserService {
     }
     throw new UserException("User was not found for id: ");
   }
+
+  @Override
+  public Page<User> getAllUsers(Integer pageSize, Integer pageNumber) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<User> users = userRepository.findAll();
+    int startIndex = (int) pageable.getOffset();
+    int endIndex = Math.min(startIndex + pageable.getPageSize(), users.size());
+    List<User> pageContent = users.subList(startIndex, endIndex);
+    return new PageImpl<>(pageContent, pageable, users.size());
+  }
+
 }

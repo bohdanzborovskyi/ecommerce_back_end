@@ -20,15 +20,12 @@ public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
   private final CategoryRepository categoryRepository;
-  private final UserService userService;
 
   public ProductServiceImpl(
       ProductRepository productRepository,
-      CategoryRepository categoryRepository,
-      UserService userService) {
+      CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
     this.categoryRepository = categoryRepository;
-    this.userService = userService;
   }
 
   @Override
@@ -95,11 +92,27 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product updateProduct(Long productId, Product req) throws ProductException {
+  public Product updateProduct(Long productId, CreateProductRequest req) throws ProductException {
     Product product = findProductById(productId);
-    if (req.getQuantity() != 0) {
-      product.setQuantity(req.getQuantity());
-    }
+    product.setId(productId);
+    product.setImageUrl(req.getImageUrl());
+    product.setColor(req.getColor());
+    product.setBrand(req.getBrand());
+    product.setTitle(req.getTitle());
+    product.setSizes(req.getSizes());
+    Category topLevelCategory = product.getCategory();
+    topLevelCategory.setName(req.getTopLevelCategory());
+    Category secondLevelCategory = topLevelCategory.getParentCategory();
+    secondLevelCategory.setName(req.getSecondLevelCategory());
+    Category thirdLevelCategory = secondLevelCategory.getParentCategory();
+    thirdLevelCategory.setName(req.getThirdLevelCategory());
+    secondLevelCategory.setParentCategory(thirdLevelCategory);
+    topLevelCategory.setParentCategory(secondLevelCategory);
+    product.setCategory(topLevelCategory);
+    product.setDescription(req.getDescription());
+    product.setPrice(req.getPrice());
+    product.setDiscountedPrice(req.getDiscountedPrice());
+    product.setDiscountPercent(req.getDiscountPercent());
     return productRepository.save(product);
   }
 
@@ -149,6 +162,16 @@ public class ProductServiceImpl implements ProductService {
       }
     }
 
+    int startIndex = (int) pageable.getOffset();
+    int endIndex = Math.min(startIndex + pageable.getPageSize(), products.size());
+    List<Product> pageContent = products.subList(startIndex, endIndex);
+    return new PageImpl<>(pageContent, pageable, products.size());
+  }
+
+  @Override
+  public Page<Product> getAllProductsAdmin(Integer pageNumber, Integer pageSize){
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<Product> products = findAllProducts();
     int startIndex = (int) pageable.getOffset();
     int endIndex = Math.min(startIndex + pageable.getPageSize(), products.size());
     List<Product> pageContent = products.subList(startIndex, endIndex);

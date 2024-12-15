@@ -10,7 +10,14 @@ import com.zbodya.ecomerce_back.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -129,7 +136,17 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public List<Order> getAllOrders() {
-    return orderRepository.findAll();
+    return orderRepository.findAll().stream().sorted(Comparator.comparing(Order::getId)).collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<Order> getAllOrdersAdmin(Integer pageNumber, Integer pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<Order> orders = getAllOrders();
+    int startIndex = (int) pageable.getOffset();
+    int endIndex = Math.min(startIndex + pageable.getPageSize(), orders.size());
+    List<Order> pageContent = orders.subList(startIndex, endIndex);
+    return new PageImpl<>(pageContent, pageable, orders.size());
   }
 
   @Override
